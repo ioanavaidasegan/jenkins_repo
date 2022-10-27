@@ -20,7 +20,7 @@ pipeline {
 
     stage('Execute shell') {
       agent {
-        label 'built-in'
+        label 'MacOS'
       }
       steps {
         sh 'ls'
