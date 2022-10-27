@@ -1,32 +1,42 @@
 pipeline {
-    parameters {
-        string defaultValue: "testValue", name: "testArg"
-    }
-    agent any
-
-    stages {
+  agent any
+  stages {
+    stage('Hello') {
+      parallel {
         stage('Hello') {
-            steps {
-                echo 'Hello World'
-            }
+          steps {
+            echo 'Hello World'
+          }
         }
-        
-        stage('Execute shell') {
-            
-            agent {
-                label 'built-in'
-            }
-            
-            steps {
-                sh 'ls'
-                sh 'chmod +x hello.sh'
-                sh './hello.sh'
-            }
+
+        stage('Stage2') {
+          steps {
+            echo 'Stage 2 message'
+          }
         }
-        stage ('Cleanup'){
-            steps {
-                cleanWs()
-            }
-        }
+
+      }
     }
+
+    stage('Execute shell') {
+      agent {
+        label 'built-in'
+      }
+      steps {
+        sh 'ls'
+        sh 'chmod +x hello.sh'
+        sh './hello.sh'
+      }
+    }
+
+    stage('Cleanup') {
+      steps {
+        cleanWs()
+      }
+    }
+
+  }
+  parameters {
+    string(defaultValue: 'testValue', name: 'testArg')
+  }
 }
